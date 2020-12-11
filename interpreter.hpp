@@ -6,7 +6,7 @@
 #include <stack> 
 
 #define MIN_BUF 0
-#define MAX_BUF 1000
+#define MAX_BUF 1024
 
 #define COMMENT    '!'
 #define INCREMENT  '+'
@@ -30,6 +30,7 @@ class Interpreter {
 
   private:
     std::string prog;
+    std::string lexed_prog;
 
     int this_ch_num;
     char this_ch;
@@ -40,6 +41,8 @@ class Interpreter {
     std::unordered_map<char, int> jump_map = {};
 
     std::stack<int> prog_stack;
+
+    void lex_program();
 
     void interpret_char();
 
