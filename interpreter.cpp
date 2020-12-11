@@ -39,44 +39,20 @@ int Interpreter::interpret_program() {
 }
 
 void Interpreter::interpret_char() {
-  if (this_ch == INCREMENT) {
-    interpret_increment();
-  }
-  else if (this_ch == DECREMENT) {
-    interpret_decrement();
-  }
-  else if (this_ch == IDX_RIGHT) {
-    interpret_idx_right();
-  }
-  else if (this_ch == IDX_LEFT) {
-    interpret_idx_left();
-  }
-  else if (this_ch == PRINT_CHAR) {
-    interpret_print_char();
-  }
-  else if (this_ch == INPUT_CHAR) {
-    interpret_input_char();
-  }
-  else if (this_ch == INPUT_LINE) {
-    interpret_input_line();
-  }
-  else if (this_ch == LOOP_BEGIN) {
-    interpret_loop_begin();
-  }
-  else if (this_ch == LOOP_END) {
-    interpret_loop_end();
-  }
-  else if (this_ch == STACK_PUSH) {
-    interpret_stack_push();
-  }
-  else if (this_ch == STACK_POP) {
-    interpret_stack_pop();
-  }
-  else if (this_ch == JUMP_TO) {
-    interpret_jump_to();
-  }
-  else {
-    interpret_jump_label();
+  switch (this_ch) {
+    case INCREMENT:  interpret_increment();  break;
+    case DECREMENT:  interpret_decrement();  break;
+    case IDX_RIGHT:  interpret_idx_right();  break;
+    case IDX_LEFT:   interpret_idx_left();   break;
+    case PRINT_CHAR: interpret_print_char(); break;
+    case INPUT_CHAR: interpret_input_char(); break;
+    case INPUT_LINE: interpret_input_line(); break;
+    case LOOP_BEGIN: interpret_loop_begin(); break;
+    case LOOP_END:   interpret_loop_end();   break;
+    case STACK_PUSH: interpret_stack_push(); break;
+    case STACK_POP:  interpret_stack_pop();  break;
+    case JUMP_TO:    interpret_jump_to();    break;
+    default:         interpret_jump_label(); break;
   }
 }
 
