@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <iostream>
+#include <cctype>
 #include <string>
 #include <stack>
 
@@ -14,6 +15,8 @@ Interpreter::Interpreter(std::string _prog) {
 }
 
 int Interpreter::interpret_program() {
+  lex_program();
+
   bool in_comment = false;
 
   for (this_ch_num = 0; this_ch_num < prog.length(); ++this_ch_num) {
@@ -25,17 +28,36 @@ int Interpreter::interpret_program() {
     else if (this_ch == '!' && in_comment) {
       in_comment = false;
     }
-    else if (!in_comment) {
+    else if (!in_comment && !std::isspace(this_ch)) {
       interpret_char();
       // std::cout << "Char:   " << this_ch << "\n";
       // std::cout << "Index:  " << std::to_string(idx) << "\n";
       // std::cout << "Value:  " << std::to_string(buf[idx]) << "\n\n";
     }
   }
+  std::cout << "Inside interpret_program: " << lexed_prog;
 
   std::cin.rdbuf();
 
   return 0;
+}
+
+void Interpreter::lex_program() {
+  bool in_comment = false;
+
+  for (int i = 0; i < prog.length(); ++i) {
+    char ch = prog.at(i);
+
+    if (ch == '!' && !in_comment) {
+      in_comment = true;
+    }
+    else if (ch == '!' && in_comment) {
+      in_comment = false;
+    }
+    else if (!in_comment && !std::isspace(ch)) {
+      lexed_prog.push_back(ch);
+    }
+  }
 }
 
 void Interpreter::interpret_char() {
