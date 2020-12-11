@@ -8,20 +8,6 @@
 #define MIN_BUF 0
 #define MAX_BUF 1024
 
-#define COMMENT    '!'
-#define INCREMENT  '+'
-#define DECREMENT  '-'
-#define IDX_LEFT   '<'
-#define IDX_RIGHT  '>'
-#define PRINT_CHAR '.'
-#define INPUT_CHAR ','
-#define INPUT_LINE '~'
-#define LOOP_BEGIN '['
-#define LOOP_END   ']'
-#define STACK_PUSH '^'
-#define STACK_POP  'v'
-#define JUMP_TO    ':'
-
 class Interpreter {
   public:
     Interpreter(std::string prog);
@@ -43,6 +29,7 @@ class Interpreter {
     std::stack<int> prog_stack;
 
     void lex_program();
+    bool is_instruction(char ch);
 
     void interpret_char();
 
@@ -58,7 +45,22 @@ class Interpreter {
     void interpret_stack_push();
     void interpret_stack_pop();
     void interpret_jump_to();
-    void interpret_jump_label();
+
+    static const char COMMENT    = '!';
+    static const char INCREMENT  = '+';
+    static const char DECREMENT  = '-';
+    static const char IDX_LEFT   = '<';
+    static const char IDX_RIGHT  = '>';
+    static const char PRINT_CHAR = '.';
+    static const char INPUT_CHAR = ',';
+    static const char INPUT_LINE = '~';
+    static const char LOOP_BEGIN = '[';
+    static const char LOOP_END   = ']';
+    static const char STACK_PUSH = '^';
+    static const char STACK_POP  = 'v';
+    static const char JUMP_TO    = ':';
+
+    static const std::string instructions;
 };
 
 #endif

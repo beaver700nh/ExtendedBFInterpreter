@@ -6,6 +6,8 @@
 
 #include "interpreter.hpp"
 
+const std::string Interpreter::instructions = "!+-<>.,~[]^v:";
+
 Interpreter::Interpreter(std::string _prog) {
   prog = _prog;
 
@@ -34,7 +36,7 @@ int Interpreter::interpret_program() {
 void Interpreter::lex_program() {
   bool in_comment = false;
 
-  for (int i = 0; i < prog.length(); ++i) {
+  for (int i = 0, j = 0; i < prog.length(); ++i) {
     char ch = prog.at(i);
 
     if (ch == '!' && !in_comment) {
@@ -45,8 +47,19 @@ void Interpreter::lex_program() {
     }
     else if (!in_comment && !std::isspace(ch)) {
       lexed_prog.push_back(ch);
+
+      if (!is_instruction(ch)) {
+        // ch is a label
+        jump_map[ch] = j;
+      }
+
+      ++j;
     }
   }
+}
+
+bool Interpreter::is_instruction(char ch) {
+  return (instructions.find(ch) != std::string::npos);
 }
 
 void Interpreter::interpret_char() {
@@ -63,7 +76,6 @@ void Interpreter::interpret_char() {
     case STACK_PUSH: interpret_stack_push(); break;
     case STACK_POP:  interpret_stack_pop();  break;
     case JUMP_TO:    interpret_jump_to();    break;
-    default:         interpret_jump_label(); break;
   }
 }
 
@@ -123,8 +135,4 @@ void Interpreter::interpret_stack_pop() {
 
 void Interpreter::interpret_jump_to() {
   this_ch_num = jump_map[lexed_prog.at(this_ch_num + 1)];
-}
-
-void Interpreter::interpret_jump_label() {
-  jump_map[this_ch] = this_ch_num;
 }
