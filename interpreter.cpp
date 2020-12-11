@@ -36,7 +36,7 @@ int Interpreter::interpret_program() {
 void Interpreter::lex_program() {
   bool in_comment = false;
 
-  for (int i = 0; i < prog.length(); ++i) {
+  for (int i = 0, j = 0; i < prog.length(); ++i) {
     char ch = prog.at(i);
 
     if (ch == '!' && !in_comment) {
@@ -46,13 +46,14 @@ void Interpreter::lex_program() {
       in_comment = false;
     }
     else if (!in_comment && !std::isspace(ch)) {
-      if (is_instruction(ch)) {
-        lexed_prog.push_back(ch);
-      }
-      else {
+      lexed_prog.push_back(ch);
+
+      if (!is_instruction(ch)) {
         // ch is a label
-        jump_map[ch] = i;
+        jump_map[ch] = j;
       }
+
+      ++j;
     }
   }
 }
