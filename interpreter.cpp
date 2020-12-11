@@ -17,25 +17,14 @@ Interpreter::Interpreter(std::string _prog) {
 int Interpreter::interpret_program() {
   lex_program();
 
-  bool in_comment = false;
+  for (this_ch_num = 0; this_ch_num < lexed_prog.length(); ++this_ch_num) {
+    this_ch = lexed_prog.at(this_ch_num);
 
-  for (this_ch_num = 0; this_ch_num < prog.length(); ++this_ch_num) {
-    this_ch = prog.at(this_ch_num);
-
-    if (this_ch == '!' && !in_comment) {
-      in_comment = true;
-    }
-    else if (this_ch == '!' && in_comment) {
-      in_comment = false;
-    }
-    else if (!in_comment && !std::isspace(this_ch)) {
-      interpret_char();
-      // std::cout << "Char:   " << this_ch << "\n";
-      // std::cout << "Index:  " << std::to_string(idx) << "\n";
-      // std::cout << "Value:  " << std::to_string(buf[idx]) << "\n\n";
-    }
+    interpret_char();
+    // std::cout << "Char:   " << this_ch << "\n";
+    // std::cout << "Index:  " << std::to_string(idx) << "\n";
+    // std::cout << "Value:  " << std::to_string(buf[idx]) << "\n\n";
   }
-  std::cout << "Inside interpret_program: " << lexed_prog;
 
   std::cin.rdbuf();
 
@@ -133,7 +122,7 @@ void Interpreter::interpret_stack_pop() {
 }
 
 void Interpreter::interpret_jump_to() {
-  this_ch_num = jump_map[prog.at(this_ch_num + 1)];
+  this_ch_num = jump_map[lexed_prog.at(this_ch_num + 1)];
 }
 
 void Interpreter::interpret_jump_label() {
