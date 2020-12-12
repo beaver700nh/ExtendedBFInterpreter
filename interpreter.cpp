@@ -6,6 +6,8 @@
 
 #include "interpreter.hpp"
 
+//#define DEBUG_PRINT
+
 const std::string Interpreter::instructions = "!+-<>.,~[]^v|/\\:;";
 
 Interpreter::Interpreter(std::string _prog) {
@@ -23,9 +25,11 @@ int Interpreter::interpret_program() {
     this_ch = lexed_prog.at(this_ch_num);
 
     interpret_char();
-    // std::cout << "Char:   " << this_ch << "\n";
-    // std::cout << "Index:  " << std::to_string(idx) << "\n";
-    // std::cout << "Value:  " << std::to_string(buf[idx]) << "\n\n";
+#ifdef DEBUG_PRINT
+    std::cout << "Char:   " << this_ch << "\n";
+    std::cout << "Index:  " << std::to_string(idx) << "\n";
+    std::cout << "Value:  " << std::to_string(buf[idx]) << "\n\n";
+#endif
   }
 
   std::cin.rdbuf();
@@ -121,11 +125,16 @@ void Interpreter::interpret_input_line() {
 }
 
 void Interpreter::interpret_loop_begin() {
-
+  loop_stack.push(this_ch_num);
 }
 
 void Interpreter::interpret_loop_end() {
-
+  if (buf[idx] != 0) {
+    this_ch_num = loop_stack.top();
+  }
+  else {
+    loop_stack.pop();
+  }
 }
 
 void Interpreter::interpret_stack_push() {
