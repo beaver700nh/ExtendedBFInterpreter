@@ -45,6 +45,10 @@ class Interpreter {
     void interpret_stack_push();
     void interpret_stack_pop();
     void interpret_jump_to();
+    void interpret_jump_zero();
+    void interpret_jump_nzero();
+    void interpret_jump_pos();
+    void interpret_jump_neg();
 
     static const char COMMENT    = '!';
     static const char INCREMENT  = '+';
@@ -58,7 +62,11 @@ class Interpreter {
     static const char LOOP_END   = ']';
     static const char STACK_PUSH = '^';
     static const char STACK_POP  = 'v';
-    static const char JUMP_TO    = ':';
+    static const char JUMP_TO    = '|';
+    static const char JUMP_ZERO  = '/';
+    static const char JUMP_NZERO = '\\';
+    static const char JUMP_POS   = ':';
+    static const char JUMP_NEG   = ';';
 
     static const std::string instructions;
 };

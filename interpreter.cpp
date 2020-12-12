@@ -6,7 +6,7 @@
 
 #include "interpreter.hpp"
 
-const std::string Interpreter::instructions = "!+-<>.,~[]^v:";
+const std::string Interpreter::instructions = "!+-<>.,~[]^v|/\\:;";
 
 Interpreter::Interpreter(std::string _prog) {
   prog = _prog;
@@ -48,7 +48,7 @@ void Interpreter::lex_program() {
     else if (!in_comment && !std::isspace(ch)) {
       lexed_prog.push_back(ch);
 
-      if (!is_instruction(ch)) {
+      if (!is_instruction(ch) && prog.at(i - 1) != JUMP_TO) {
         // ch is a label
         jump_map[ch] = j;
       }
@@ -76,6 +76,10 @@ void Interpreter::interpret_char() {
     case STACK_PUSH: interpret_stack_push(); break;
     case STACK_POP:  interpret_stack_pop();  break;
     case JUMP_TO:    interpret_jump_to();    break;
+    case JUMP_ZERO:  interpret_jump_zero();  break;
+    case JUMP_NZERO: interpret_jump_nzero(); break;
+    case JUMP_POS:   interpret_jump_pos();   break;
+    case JUMP_NEG:   interpret_jump_neg();   break;
   }
 }
 
@@ -135,4 +139,28 @@ void Interpreter::interpret_stack_pop() {
 
 void Interpreter::interpret_jump_to() {
   this_ch_num = jump_map[lexed_prog.at(this_ch_num + 1)];
+}
+
+void Interpreter::interpret_jump_zero() {
+  if (buf[idx] == 0) {
+    interpret_jump_to();
+  }
+}
+
+void Interpreter::interpret_jump_nzero() {
+  if (buf[idx] != 0) {
+    interpret_jump_to();
+  }
+}
+
+void Interpreter::interpret_jump_pos() {
+  if (buf[idx] > 0) {
+    interpret_jump_to();
+  }
+}
+
+void Interpreter::interpret_jump_neg() {
+  if (buf[idx] < 0) {
+    interpret_jump_to();
+  }
 }
