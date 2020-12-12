@@ -27,7 +27,9 @@ class Interpreter {
     std::unordered_map<char, int> jump_map = {};
 
     std::stack<int> prog_stack;
-    std::stack<int> loop_stack;
+
+    std::unordered_map<int, int[2]> loop_map = {};
+    int loop_id = 0;
 
     void lex_program();
     bool is_instruction(char ch);

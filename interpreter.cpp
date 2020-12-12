@@ -40,7 +40,7 @@ int Interpreter::interpret_program() {
 void Interpreter::lex_program() {
   bool in_comment = false;
 
-  for (int i = 0, j = 0; i < prog.length(); ++i) {
+  for (int i = 0, j = 0, k = 0; i < prog.length(); ++i) {
     char ch = prog.at(i);
 
     if (ch == '!' && !in_comment) {
@@ -55,6 +55,12 @@ void Interpreter::lex_program() {
       if (!is_instruction(ch) && prog.at(i - 1) != JUMP_TO) {
         // ch is a label
         jump_map[ch] = j;
+      }
+      else if (ch == LOOP_BEGIN) {
+        loop_map[k++][0] = j;
+      }
+      else if (ch == LOOP_END) {
+        loop_map[k][1] = j;
       }
 
       ++j;
@@ -125,15 +131,14 @@ void Interpreter::interpret_input_line() {
 }
 
 void Interpreter::interpret_loop_begin() {
-  loop_stack.push(this_ch_num);
+  if (buf[idx] != 0) {
+    this_ch_num = loop_map[loop_id][1];
+  }
 }
 
 void Interpreter::interpret_loop_end() {
   if (buf[idx] != 0) {
-    this_ch_num = loop_stack.top();
-  }
-  else {
-    loop_stack.pop();
+    this_ch_num = loop_map[loop_id][0];
   }
 }
 
